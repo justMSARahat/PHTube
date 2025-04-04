@@ -31,6 +31,33 @@ removeActiveClass = () => {
 
 
 }
+LoadVIdeoDetails = (id) => {
+    const url = `https://openapi.programming-hero.com/api/phero-tube/video/${id}`;
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        DisplayVideoDetails(data.video);
+    })
+}
+DisplayVideoDetails = (data) => {
+    document.getElementById('Video_Details').showModal();
+
+    const videoPlay = document.getElementById("modal_details_container");
+    videoPlay.innerHTML = `
+        <div class="">
+        <div class="card-body">
+            <h2 class="font-bold text-lg">${data.title}</h2>
+            <p>${data.description}</p>
+        </div>
+        <figure>
+            <img
+            src="${data.thumbnail}"
+            alt="Shoes" />
+        </figure>
+        </div>
+
+    `;
+}
 showCategory = (buttons) => {
     CategoryContainer = document.getElementById('category_container');
     for(const button of buttons){
@@ -88,10 +115,12 @@ ShowVideos = (VideoInfo) => {
                     </div>
                     <div class="intro">
                         <h2 class="text-lg font-semibold">${video.title}</h2>
-                        <p class="text-sm text-gray-400 flex gap-1 items-center py-2">${video.authors[0].profile_name} <img src="https://img.icons8.com/?size=32&id=6xO3fnY41hu2&format=png" class="w-4" alt=""></p>
+                        <p class="text-sm text-gray-400 flex gap-1 items-center py-2">${video.authors[0].profile_name}
+                        ${video.authors[0].verified == true ? `<img src="https://img.icons8.com/?size=32&id=6xO3fnY41hu2&format=png" class="w-4" alt=""></p>` : ''}
                         <p class="text-sm text-gray-400 ">${video.others.views} Views </p>
                     </div>
                 </div>
+                <button class="btn btn-block" id="Video-Number-${video.video_id}" onclick="LoadVIdeoDetails('${video.video_id}')";>Open Video</button>
             </div>`;
             Container.appendChild(videoCart);
         });
@@ -100,4 +129,16 @@ ShowVideos = (VideoInfo) => {
 
 };
 
+document.getElementById("searchInput").addEventListener('keyup', function(event){
+    event.preventDefault();
+    const input = event.target.value;
+    const url = `https://openapi.programming-hero.com/api/phero-tube/videos?title=${input}`
+    fetch(url)
+        .then(resources => resources.json())
+        .then(data => {
+            ShowVideos(data.videos);
+        })
+});
+
 LoadCategory();
+LoadVideos();
