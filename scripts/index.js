@@ -11,53 +11,93 @@ LoadVideos = () => {
     fetch('https://openapi.programming-hero.com/api/phero-tube/videos')
         .then(resources => resources.json())
         .then(data => {
+
+            removeActiveClass();
+            const ButtonClicked = document.getElementById('btn-all');
+            ButtonClicked.classList.add("bg-red-600");
+            ButtonClicked.classList.add("text-white");
+            ButtonClicked.classList.add("active");
+
             ShowVideos(data.videos);
         })
+}
+removeActiveClass = () => {
+    const activeButtons = document.getElementsByClassName("active");
+    for(let btn of activeButtons){
+        btn.classList.remove("bg-red-600");
+        btn.classList.remove("text-white");
+        btn.classList.remove("active");
+    }
+
+
 }
 showCategory = (buttons) => {
     CategoryContainer = document.getElementById('category_container');
     for(const button of buttons){
         const new_btn = document.createElement('button');
-        new_btn.innerHTML = `<button class="btn btn-small hover:text-white hover:bg-[#FF1F3D]">${button.category}</button>` ;
+        new_btn.innerHTML = `<button id='btn-${button.category_id}' class="btn btn-small hover:text-white hover:bg-[#FF1F3D]" onclick="FilterCategory(${button.category_id})">${button.category}</button>` ;
 
         CategoryContainer.appendChild(new_btn);
         console.log(button)
     }
 }
-ShowVideos = (VideoInfo) => {
-    Container = document.getElementById('VideoContainer');
-    VideoInfo.forEach((video) => {
-        console.log(video);
+FilterCategory = (id) => {
+    const url = `https://openapi.programming-hero.com/api/phero-tube/category/${id}`;
+    fetch(url)
+    .then(resources => resources.json())
+    .then(data => {
+        removeActiveClass();
+        const ButtonClicked = document.getElementById(`btn-${id}`);
+        ButtonClicked.classList.add("bg-red-600");
+        ButtonClicked.classList.add("text-white");
+        ButtonClicked.classList.add("active");
+        console.log(ButtonClicked );
+        ShowVideos(data.category);
+    })
 
-        const videoCart = document.createElement("div");
-        videoCart.innerHTML = `
-        <div class="card  my-5">
-            <figure class="relative">
-                <img class="h-[300px] w-12/12 object-cover rounded-lg " src="${video.thumbnail}" alt="Shoes" />
-                <span class="absolute bottom-2 right-2 text-white bg-black opacity-80 px-2 text-sm rounded">3hrs 56 min ago</span>
-            </figure>
-            <div class="flex gap-3 px-0 py-5">
-                <div class="profile">
-                    <div class="avatar">
-                        <div class="ring-primary ring-offset-base-100 w-6 rounded-full ring ring-offset-2">
-                            <img src="${video.authors[0].profile_picture}" />
+}
+ShowVideos = (VideoInfo) => {
+    document.getElementById('VideoContainer').innerHTML = ``;
+    Container = document.getElementById('VideoContainer');
+
+    if(VideoInfo.length == 0){
+        Container.innerHTML = `
+        <div class="col-span-full flex flex-col justify-center items-center py-20 text-center" id="Nothing_Found">
+        <img class="w-30" src="assets/Icon.png" alt="" >
+        <h2 class="text-2xl font-semibold">Oops!! Sorry, There is no content Here</h2>
+        </div>
+        `;
+    }
+    else{
+        VideoInfo.forEach((video) => {
+
+            const videoCart = document.createElement("div");
+            videoCart.innerHTML = `
+            <div class="card  my-5">
+                <figure class="relative">
+                    <img class="h-[300px] w-12/12 object-cover rounded-lg " src="${video.thumbnail}" alt="Shoes" />
+                    <span class="absolute bottom-2 right-2 text-white bg-black opacity-80 px-2 text-sm rounded">3hrs 56 min ago</span>
+                </figure>
+                <div class="flex gap-3 px-0 py-5">
+                    <div class="profile">
+                        <div class="avatar">
+                            <div class="ring-primary ring-offset-base-100 w-6 rounded-full ring ring-offset-2">
+                                <img src="${video.authors[0].profile_picture}" />
+                            </div>
                         </div>
                     </div>
+                    <div class="intro">
+                        <h2 class="text-lg font-semibold">${video.title}</h2>
+                        <p class="text-sm text-gray-400 flex gap-1 items-center py-2">${video.authors[0].profile_name} <img src="https://img.icons8.com/?size=32&id=6xO3fnY41hu2&format=png" class="w-4" alt=""></p>
+                        <p class="text-sm text-gray-400 ">${video.others.views} Views </p>
+                    </div>
                 </div>
-                <div class="intro">
-                    <h2 class="text-lg font-semibold">${video.title}</h2>
-                    <p class="text-sm text-gray-400 flex gap-1 items-center py-2">${video.authors[0].profile_name} <img src="https://img.icons8.com/?size=32&id=6xO3fnY41hu2&format=png" class="w-4" alt=""></p>
-                    <p class="text-sm text-gray-400 ">${video.others.views} Views </p>
-                </div>
-            </div>
-        </div>
+            </div>`;
+            Container.appendChild(videoCart);
+        });
+    }
 
-        `;
-        Container.appendChild(videoCart);
-    })
-}
+
+};
 
 LoadCategory();
-LoadVideos();
-
-
