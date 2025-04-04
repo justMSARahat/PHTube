@@ -14,7 +14,7 @@ showCategory = (buttons) => {
     CategoryContainer = document.getElementById('category_container');
     for(const button of buttons){
         const new_btn = document.createElement('button');
-        new_btn.innerHTML = `<button class="btn btn-small">${button.category}</button>` ;
+        new_btn.innerHTML = `<button class="btn btn-small hover:text-white hover:bg-[#FF1F3D]">${button.category}</button>` ;
 
         CategoryContainer.appendChild(new_btn);
         console.log(button)
