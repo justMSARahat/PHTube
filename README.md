@@ -1,5 +1,5 @@
 <p align="center">
-<img src="Logo.png"  />
+<img src="assets/Logo.png"  />
 </p>
 <p align="center" style="font-size: 24px;">
   PH Tube is a web-based video streaming application where users can browse and watch videos sorted by categories such as music, comedy, and tutorials.
@@ -11,14 +11,14 @@
 </p>
 
 <p style=" font-weight:bold">
- GET: Categories 
+ GET: Categories
 </p>
 
 Endpoint: [https://openapi.programming-hero.com/api/phero-tube/categories](https://openapi.programming-hero.com/api/phero-tube/categories) <br/>
 
 <hr/>
 <p style=" font-weight:bold">
- GET: Videos 
+ GET: Videos
 </p>
 
 Endpoint: [https://openapi.programming-hero.com/api/phero-tube/videos](https://openapi.programming-hero.com/api/phero-tube/videos) <br/>
@@ -89,10 +89,10 @@ Example: [https://openapi.programming-hero.com/api/phero-tube/video/aaac](https:
  Design Idea's
 </p>
 Basic Layout
-<img src="design/Frame 1.png">
+<img src="assets/design/Frame 1.png">
 <hr/>
 Error Layout
 
-<img src="design/Frame 3.png">
+<img src="assets/design/Frame 3.png">
 
 <hr/>
